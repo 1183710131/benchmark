@@ -1,5 +1,7 @@
 package com.alibaba.edas;
 
+import com.alibaba.edas.generator.Userinfo;
+import com.alibaba.edas.generator.UserinfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +17,8 @@ public class SimpleController {
 
     @Resource
     private HelloService helloService;
-    @Resource
-    private calculate cal;
+//    @Resource
+//    private calculate cal;
 
     @Resource
     private UserinfoDao u;
@@ -26,10 +28,10 @@ public class SimpleController {
         return helloService.echo(str);
     }
 
-    @RequestMapping(value = "/hsf-cal/{str}",method = RequestMethod.GET)
-    public int cal(@PathVariable String str){
-        return cal.cal(str);
-    }
+//    @RequestMapping(value = "/hsf-cal/{str}",method = RequestMethod.GET)
+//    public int cal(@PathVariable String str){
+//        return cal.cal(str);
+//    }
 
     @RequestMapping(value = "/hsf-test/insert")
     public void test() {
