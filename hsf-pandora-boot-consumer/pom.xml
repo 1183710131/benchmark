@@ -11,7 +11,6 @@
     <properties>
         <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
         <pandora-boot.version>2019-06-stable</pandora-boot.version>
-        <mybatis-starter.version>2.0.6</mybatis-starter.version>
     </properties>
 
     <dependencies>
@@ -51,32 +50,6 @@
         <!--            <artifactId>spring-tx</artifactId>-->
         <!--            <version>4.3.5.RELEASE</version>-->
         <!--        </dependency>-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>4.3.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>${mybatis-starter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
-        </dependency>
 
     </dependencies>
 
@@ -124,6 +97,14 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>
