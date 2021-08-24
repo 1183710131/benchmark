@@ -12,8 +12,8 @@
 
 	<!-- 数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/microservice" />
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/microservice?serverTimezone=GMT" />
 		<property name="username" value="root" />
 		<property name="password" value="123456aa" />
 <!--		<property name="validationQuery" value="SELECT 1" />-->

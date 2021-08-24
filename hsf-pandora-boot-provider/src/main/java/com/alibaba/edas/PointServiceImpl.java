@@ -26,6 +26,7 @@ public class PointServiceImpl implements PointService{
             if(pointaccounts.get(i).getId() == pointId){
                 long num = pointaccounts.get(i).getPointNumber() + pointChange;
                 pointaccounts.get(i).setPointNumber(num);
+                pointaccountDao.updateByPrimaryKey(pointaccounts.get(i));
             }
         }
         return true;
@@ -44,6 +45,7 @@ public class PointServiceImpl implements PointService{
         PointaccountExample pointaccountExample = new PointaccountExample();
         PointaccountExample.Criteria criteria = pointaccountExample.createCriteria();
         criteria.andUserIdEqualTo(userId);
+        //criteria.andPointActivityEqualTo(activityId);
         return pointaccountDao.selectByExample(pointaccountExample);
     }
 

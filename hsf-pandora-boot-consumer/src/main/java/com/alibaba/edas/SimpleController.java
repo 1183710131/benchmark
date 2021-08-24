@@ -59,10 +59,10 @@ public class SimpleController {
         pointaccount.setGmtModify(date);
         pointaccount.setUserId((long)1);
         pointaccount.setPointActivity((long)1);
-     //   pointService.insertPointAccount(pointaccount);
+        pointService.insertPointAccount(pointaccount);
 
         Pointdetail pointdetail = new Pointdetail();
-        pointdetail.setChangeReason("增加积分10");
+        pointdetail.setChangeReason("澧炲姞绉垎10");
         pointdetail.setGmtCreate(date);
         pointdetail.setGmtModify(date);
         pointdetail.setPointChange((long)10);
@@ -70,7 +70,7 @@ public class SimpleController {
         pointdetail.setUserId((long)1);
         pointService.insertPointDetail(pointdetail);
 
-        pointdetail.setChangeReason("减少积分6");
+        pointdetail.setChangeReason("鍑忓皯绉垎6");
         pointdetail.setPointChange((long)-6);
         pointService.insertPointDetail(pointdetail);
 
