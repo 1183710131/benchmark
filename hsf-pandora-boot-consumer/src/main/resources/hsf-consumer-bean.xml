@@ -9,8 +9,35 @@
     </bean>
 
 
+    <bean id="userService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">
+        <property name="interfaceName" value="com.alibaba.edas.UserService"/>
+        <property name="version" value="${hsf.version}"/>
+        <property name="clientTimeout" value="${hsf.timeout}"/>
+    </bean>
+
+
     <bean id="pointService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">
         <property name="interfaceName" value="com.alibaba.edas.PointService"/>
+        <property name="version" value="${hsf.version}"/>
+        <property name="clientTimeout" value="${hsf.timeout}"/>
+    </bean>
+
+
+    <bean id="taskService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">
+        <property name="interfaceName" value="com.alibaba.edas.TaskService"/>
+        <property name="version" value="${hsf.version}"/>
+        <property name="clientTimeout" value="${hsf.timeout}"/>
+    </bean>
+
+
+    <bean id="prizeService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">
+        <property name="interfaceName" value="com.alibaba.edas.PrizeService"/>
+        <property name="version" value="${hsf.version}"/>
+        <property name="clientTimeout" value="${hsf.timeout}"/>
+    </bean>
+
+    <bean id="inviteAndDrawActivity" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">
+        <property name="interfaceName" value="com.alibaba.edas.inviteAndDrawActivity"/>
         <property name="version" value="${hsf.version}"/>
         <property name="clientTimeout" value="${hsf.timeout}"/>
     </bean>

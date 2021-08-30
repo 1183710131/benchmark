@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alibaba.edas.generator.PrizeContentDao">
+  <resultMap id="BaseResultMap" type="com.alibaba.edas.generator.PrizeContent">
+    <id column="prize_id" jdbcType="BIGINT" property="prizeId" />
+    <result column="prize_type" jdbcType="BIGINT" property="prizeType" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="prize_num" jdbcType="BIGINT" property="prizeNum" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="prize_money" jdbcType="BIGINT" property="prizeMoney" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    prize_id, prize_type, gmt_create, prize_num, activity_id, prize_money
+  </sql>
+  <select id="selectByExample" parameterType="com.alibaba.edas.generator.PrizeContentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from prize_content
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from prize_content
+    where prize_id = #{prizeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from prize_content
+    where prize_id = #{prizeId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.alibaba.edas.generator.PrizeContentExample">
+    delete from prize_content
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="prize_id" keyProperty="prizeId" parameterType="com.alibaba.edas.generator.PrizeContent" useGeneratedKeys="true">
+    insert into prize_content (prize_type, gmt_create, prize_num, 
+      activity_id, prize_money)
+    values (#{prizeType,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{prizeNum,jdbcType=BIGINT}, 
+      #{activityId,jdbcType=BIGINT}, #{prizeMoney,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" keyColumn="prize_id" keyProperty="prizeId" parameterType="com.alibaba.edas.generator.PrizeContent" useGeneratedKeys="true">
+    insert into prize_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prizeType != null">
+        prize_type,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="prizeNum != null">
+        prize_num,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="prizeMoney != null">
+        prize_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="prizeType != null">
+        #{prizeType,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prizeNum != null">
+        #{prizeNum,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="prizeMoney != null">
+        #{prizeMoney,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.alibaba.edas.generator.PrizeContentExample" resultType="java.lang.Long">
+    select count(*) from prize_content
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update prize_content
+    <set>
+      <if test="record.prizeId != null">
+        prize_id = #{record.prizeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.prizeType != null">
+        prize_type = #{record.prizeType,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.prizeNum != null">
+        prize_num = #{record.prizeNum,jdbcType=BIGINT},
+      </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.prizeMoney != null">
+        prize_money = #{record.prizeMoney,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update prize_content
+    set prize_id = #{record.prizeId,jdbcType=BIGINT},
+      prize_type = #{record.prizeType,jdbcType=BIGINT},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      prize_num = #{record.prizeNum,jdbcType=BIGINT},
+      activity_id = #{record.activityId,jdbcType=BIGINT},
+      prize_money = #{record.prizeMoney,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.alibaba.edas.generator.PrizeContent">
+    update prize_content
+    <set>
+      <if test="prizeType != null">
+        prize_type = #{prizeType,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prizeNum != null">
+        prize_num = #{prizeNum,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="prizeMoney != null">
+        prize_money = #{prizeMoney,jdbcType=BIGINT},
+      </if>
+    </set>
+    where prize_id = #{prizeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.alibaba.edas.generator.PrizeContent">
+    update prize_content
+    set prize_type = #{prizeType,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      prize_num = #{prizeNum,jdbcType=BIGINT},
+      activity_id = #{activityId,jdbcType=BIGINT},
+      prize_money = #{prizeMoney,jdbcType=BIGINT}
+    where prize_id = #{prizeId,jdbcType=BIGINT}
+  </update>
+</mapper>

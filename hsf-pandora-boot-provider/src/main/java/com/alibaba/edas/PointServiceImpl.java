@@ -4,6 +4,7 @@ import com.alibaba.boot.hsf.annotation.HSFProvider;
 import com.alibaba.edas.generator.*;
 
 import javax.annotation.Resource;
+import java.sql.Date;
 import java.util.List;
 
 @HSFProvider(serviceInterface = PointService.class, serviceVersion = "1.0.0")
@@ -14,19 +15,21 @@ public class PointServiceImpl implements PointService{
     @Resource
     private PointdetailDao pointdetailDao;
 
-
     @Override
     public boolean insertPointDetail(Pointdetail record) {
         pointdetailDao.insert(record);
         long pointId = record.getPointId();
         long userId = record.getUserId();
         long pointChange = record.getPointChange();
-        List<Pointaccount> pointaccounts = selectByUserId(userId);
-        for(int i = 0; i < pointaccounts.size(); i++){
-            if(pointaccounts.get(i).getId() == pointId){
-                long num = pointaccounts.get(i).getPointNumber() + pointChange;
-                pointaccounts.get(i).setPointNumber(num);
-                pointaccountDao.updateByPrimaryKey(pointaccounts.get(i));
+        List<Pointaccount> pointAccounts = (List<Pointaccount>) pointaccountDao.selectByPrimaryKey(pointId);
+        //List<Pointaccount> pointaccounts = selectByUserId(userId);
+        for(int i = 0; i < pointAccounts.size(); i++){
+            if(pointAccounts.get(i).getUserId() == userId){
+                long num = pointAccounts.get(i).getPointNumber() + pointChange;
+                pointAccounts.get(i).setPointNumber(num);
+                Date date =new Date(System.currentTimeMillis());
+                pointAccounts.get(i).setGmtModify(date);
+                pointaccountDao.updateByPrimaryKey(pointAccounts.get(i));
             }
         }
         return true;
@@ -41,12 +44,12 @@ public class PointServiceImpl implements PointService{
     }
 
     @Override
-    public List<Pointaccount> selectByUserId(long userId) {
+    public Pointaccount selectByUserId(long userId,long activityId) {
         PointaccountExample pointaccountExample = new PointaccountExample();
         PointaccountExample.Criteria criteria = pointaccountExample.createCriteria();
         criteria.andUserIdEqualTo(userId);
-        //criteria.andPointActivityEqualTo(activityId);
-        return pointaccountDao.selectByExample(pointaccountExample);
+        criteria.andPointActivityEqualTo(activityId);
+        return pointaccountDao.selectByExample(pointaccountExample).get(0);
     }
 
     @Override

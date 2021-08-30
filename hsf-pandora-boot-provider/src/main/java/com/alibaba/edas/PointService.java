@@ -15,7 +15,7 @@ public interface PointService {
 
 
 
-    List<Pointaccount> selectByUserId(long userId);
+    Pointaccount selectByUserId(long userId,long activityId);
 
 
 
