@@ -100,8 +100,5 @@ public class SimpleController {
 
     }
 
-    @RequestMapping(value="/hsf-prize/test")
-    public void checkPrize(){
 
-    }
 }

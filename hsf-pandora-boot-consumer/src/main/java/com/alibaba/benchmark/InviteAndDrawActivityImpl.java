@@ -1,7 +1,13 @@
-package com.alibaba.edas;
+package com.alibaba.benchmark;
 
 import com.alibaba.boot.hsf.annotation.HSFProvider;
+import com.alibaba.edas.PointService;
+import com.alibaba.edas.PrizeService;
+import com.alibaba.edas.TaskService;
+import com.alibaba.edas.UserService;
 import com.alibaba.edas.generator.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 
 import javax.annotation.Resource;
@@ -12,31 +18,14 @@ import java.util.List;
 import java.util.TimeZone;
 
 
-@HSFProvider(serviceInterface = inviteAndDrawActivity.class, serviceVersion = "1.0.0")
-public class inviteAndDrawActivityImpl implements inviteAndDrawActivity{
+@Service
+public class InviteAndDrawActivityImpl implements InviteAndDrawActivity {
 
     private long point = 10;
 
-    @Resource
-    private UserinfoDao userinfoDao;
+    private int needTaskNum = 3;
 
-    @Resource
-    private TaskcontentDao taskcontentDao;
-
-    @Resource
-    private TaskdetailDao taskdetailDao;
-
-    @Resource
-    private PrizeContentDao prizeContentDao;
-
-    @Resource
-    private PrizeDetailDao prizeDetailDao;
-
-    @Resource
-    private PointaccountDao pointaccountDao;
-
-    @Resource
-    private PointdetailDao pointdetailDao;
+    private int needInviteNum = 3;
 
     @Resource
     private TaskService taskService;
@@ -47,10 +36,15 @@ public class inviteAndDrawActivityImpl implements inviteAndDrawActivity{
     @Resource
     private PointService pointService;
 
+    @Resource
+    private UserService userService;
+
     @Override
     public String completeTask(long userId, long taskId) {
-        Userinfo userinfo =  userinfoDao.selectByPrimaryKey(userId);
-        Taskcontent taskcontent = taskcontentDao.selectByPrimaryKey(taskId);
+        Userinfo userinfo = userService.selectUserinfoById(userId);
+
+        Taskcontent taskcontent = taskService.selectByTaskId(taskId);
+
         if(userinfo.equals(null) || taskcontent.equals(null)){
             return "用户或任务不存在!";
         }
@@ -74,18 +68,16 @@ public class inviteAndDrawActivityImpl implements inviteAndDrawActivity{
                 if(taskDetails.get(i).getGmtCreate().after(new Timestamp(zero)) && taskDetails.get(i).getTaskId() == taskId){
                     return "每日只能完成任务一次!";
                 }
-                else{
-                    taskdetail.setDetailContent(userId + "完成任务" + taskId);
-                    taskService.insertTaskDetail(taskdetail);
-                }
             }
+            taskdetail.setDetailContent(userId + "完成任务" + taskId);
+            taskService.insertTaskDetail(taskdetail);
             return "任务成功完成!";
         }
     }
 
     @Override
     public List<Taskdetail> searchTask(long userId, long activityId) {
-        Userinfo userinfo =  userinfoDao.selectByPrimaryKey(userId);
+        Userinfo userinfo = userService.selectUserinfoById(userId);
         List<Taskdetail> taskDetails = taskService.selectTaskDetailByActivityId(activityId);
         List<Taskdetail> result = new ArrayList<>();
         if(userinfo.equals(null) || taskDetails.equals(null)){
@@ -104,25 +96,35 @@ public class inviteAndDrawActivityImpl implements inviteAndDrawActivity{
 
     @Override
     public String shareActivity(long userId1, long userId2, long activityId) {
-        Userinfo userinfo1 =  userinfoDao.selectByPrimaryKey(userId1);
-        Userinfo userinfo2 =  userinfoDao.selectByPrimaryKey(userId2);
+        Userinfo userinfo1 = userService.selectUserinfoById(userId1);
+        Userinfo userinfo2 = userService.selectUserinfoById(userId2);
         if(userinfo1.equals(null) || userinfo2.equals(null)) {
             return ("用户不存在!");
         }
         List<Taskdetail> taskDetails = taskService.selectTaskDetailByUserId(userId1);
         List<PrizeDetail> prizeDetails = prizeService.selectPrizeDetailById(userId1);
         List<Taskdetail> fitDetails = new ArrayList<>();
-        Date date = (Date) prizeDetails.get(0).getGmtCreate();
-        for(int i = 0; i < prizeDetails.size(); i++){
-            if(prizeDetails.get(i).getActivityId() == activityId){
-                if(date.after(prizeDetails.get(i).getGmtCreate())){
-                    date = (Date) prizeDetails.get(i).getGmtCreate();
+        Date date = new Date(System.currentTimeMillis());
+        if (prizeDetails.size() > 0) {
+            date = (Date) prizeDetails.get(0).getGmtCreate();
+            for (int i = 0; i < prizeDetails.size(); i++) {
+                if (prizeDetails.get(i).getActivityId() == activityId) {
+                    if (date.after(prizeDetails.get(i).getGmtCreate())) {
+                        date = (Date) prizeDetails.get(i).getGmtCreate();
+                    }
+                }
+            }
+            for(int i = 0; i < taskDetails.size(); i++){
+                if(taskDetails.get(i).getAcitivityId() == activityId && taskDetails.get(i).getGmtCreate().after(date)){
+                    fitDetails.add(taskDetails.get(i));
                 }
             }
         }
-        for(int i = 0; i < taskDetails.size(); i++){
-            if(taskDetails.get(i).getAcitivityId() == activityId && taskDetails.get(i).getGmtCreate().after(date)){
-                fitDetails.add(taskDetails.get(i));
+        else {
+            for (int i = 0; i < taskDetails.size(); i++) {
+                if (taskDetails.get(i).getAcitivityId() == activityId) {
+                    fitDetails.add(taskDetails.get(i));
+                }
             }
         }
         if (fitDetails.size() < 3){
@@ -133,7 +135,9 @@ public class inviteAndDrawActivityImpl implements inviteAndDrawActivity{
             pointdetail.setUserId(userId1);
             pointdetail.setPointChange(point);
             Date dateNow =new Date(System.currentTimeMillis());
+            pointdetail.setGmtCreate(dateNow);
             pointdetail.setGmtModify(dateNow);
+            pointdetail.setPointId(pointService.selectByUserId(userId1,activityId).getId());
             pointdetail.setChangeReason(userId1 + "参与拉人活动，成功邀请" + userId2 +",获得积分数" + point);
             pointService.insertPointDetail(pointdetail);
             return userId1 + "参与拉人活动，成功邀请" + userId2;
@@ -150,24 +154,39 @@ public class inviteAndDrawActivityImpl implements inviteAndDrawActivity{
         prizeDetail.setGmtCreate(date);
         prizeDetail.setPrizeId(prizeContent.getPrizeId());
         prizeDetail.setUserId(userId);
-        prizeDetail.setDetailContent(userId + "获得奖品" + prizeContent.getPrizeType() + prizeContent.getPrizeMoney());
+        prizeDetail.setDetailContent(userId + "获得奖品" + prizeContent.getPrizeType() +"金额为"+ prizeContent.getPrizeMoney());
         prizeService.updatePrizeContent(prizeContent);
         prizeService.insertPrizeDetail(prizeDetail);
+
+        Pointdetail pointdetail = new Pointdetail();
+        pointdetail.setGmtCreate(date);
+        pointdetail.setChangeReason("");
+        pointdetail.setGmtModify(date);
+        pointdetail.setPointId(pointService.selectByUserId(userId,activityId).getId());
+        pointdetail.setPointChange(point*needInviteNum);
+        pointdetail.setUserId(userId);
+        pointService.insertPointDetail(pointdetail);
+
         return prizeDetail;
 
     }
 
     @Override
     public void initPoint(long userId, long activityId) {
-        Pointaccount pointaccount = new Pointaccount();
-        pointaccount.setPointNumber((long)0);
-        Date date =new Date(System.currentTimeMillis());
-        pointaccount.setGmtCreate(date);
-        pointaccount.setGmtModify(date);
-        pointaccount.setUserId(userId);
-        pointaccount.setPointActivity(activityId);
-        System.out.println(pointaccount.toString());
-        pointService.insertPointAccount(pointaccount);
+
+        if (null != pointService.selectByUserId(userId,activityId)) return;
+        else {
+            Pointaccount pointaccount = new Pointaccount();
+            pointaccount.setPointNumber((long) 0);
+            Date date = new Date(System.currentTimeMillis());
+            pointaccount.setGmtCreate(date);
+            pointaccount.setGmtModify(date);
+            pointaccount.setUserId(userId);
+            pointaccount.setPointActivity(activityId);
+            System.out.println(pointaccount.toString());
+
+            pointService.insertPointAccount(pointaccount);
+        }
     }
 
     @Override

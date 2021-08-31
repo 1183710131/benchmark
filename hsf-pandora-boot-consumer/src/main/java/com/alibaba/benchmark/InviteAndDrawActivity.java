@@ -1,10 +1,12 @@
-package com.alibaba.edas;
+package com.alibaba.benchmark;
 
 import com.alibaba.edas.generator.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-public interface inviteAndDrawActivity {
+
+public interface InviteAndDrawActivity {
 
     /**
      * 调用任务服务，完成成功则增加一条任务流水，失败则打印原因。

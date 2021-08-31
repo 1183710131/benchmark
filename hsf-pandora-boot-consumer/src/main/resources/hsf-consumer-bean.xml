@@ -36,10 +36,10 @@
         <property name="clientTimeout" value="${hsf.timeout}"/>
     </bean>
 
-    <bean id="inviteAndDrawActivity" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">
-        <property name="interfaceName" value="com.alibaba.edas.inviteAndDrawActivity"/>
-        <property name="version" value="${hsf.version}"/>
-        <property name="clientTimeout" value="${hsf.timeout}"/>
-    </bean>
+<!--    <bean id="inviteAndDrawActivity" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean">-->
+<!--        <property name="interfaceName" value="com.alibaba.benchmark.InviteAndDrawActivity"/>-->
+<!--        <property name="version" value="${hsf.version}"/>-->
+<!--        <property name="clientTimeout" value="${hsf.timeout}"/>-->
+<!--    </bean>-->
 
 </beans>

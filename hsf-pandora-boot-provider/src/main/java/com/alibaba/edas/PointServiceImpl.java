@@ -21,17 +21,14 @@ public class PointServiceImpl implements PointService{
         long pointId = record.getPointId();
         long userId = record.getUserId();
         long pointChange = record.getPointChange();
-        List<Pointaccount> pointAccounts = (List<Pointaccount>) pointaccountDao.selectByPrimaryKey(pointId);
+        Pointaccount pointAccount =  pointaccountDao.selectByPrimaryKey(pointId);
+        long num = pointAccount.getPointNumber() + pointChange;
+        pointAccount.setPointNumber(num);
+        Date date =new Date(System.currentTimeMillis());
+        pointAccount.setGmtModify(date);
+        pointaccountDao.updateByPrimaryKey(pointAccount);
         //List<Pointaccount> pointaccounts = selectByUserId(userId);
-        for(int i = 0; i < pointAccounts.size(); i++){
-            if(pointAccounts.get(i).getUserId() == userId){
-                long num = pointAccounts.get(i).getPointNumber() + pointChange;
-                pointAccounts.get(i).setPointNumber(num);
-                Date date =new Date(System.currentTimeMillis());
-                pointAccounts.get(i).setGmtModify(date);
-                pointaccountDao.updateByPrimaryKey(pointAccounts.get(i));
-            }
-        }
+
         return true;
     }
 
@@ -49,7 +46,11 @@ public class PointServiceImpl implements PointService{
         PointaccountExample.Criteria criteria = pointaccountExample.createCriteria();
         criteria.andUserIdEqualTo(userId);
         criteria.andPointActivityEqualTo(activityId);
-        return pointaccountDao.selectByExample(pointaccountExample).get(0);
+        if(pointaccountDao.selectByExample(pointaccountExample).size() > 0){
+            return pointaccountDao.selectByExample(pointaccountExample).get(0);
+        }
+        else
+            return null;
     }
 
     @Override
