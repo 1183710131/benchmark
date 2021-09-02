@@ -54,4 +54,7 @@ public interface InviteAndDrawActivity {
      * @return
      */
     List<Taskcontent> showTaskList(long activityId);
+
+
+    List<Taskdetail> searchInviteDetail(long userId, long activityId);
 }

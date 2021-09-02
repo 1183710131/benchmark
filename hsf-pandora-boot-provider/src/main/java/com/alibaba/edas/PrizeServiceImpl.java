@@ -58,7 +58,16 @@ public class PrizeServiceImpl implements PrizeService{
         PrizeContentExample.Criteria criteria = prizeContentExample.createCriteria();
         List<PrizeContent> prizeContents = prizeContentDao.selectByExample(prizeContentExample);
         int prizeNum = prizeContents.size();
-        int index = (int) Math.random()*prizeNum;
+        int index = (int) (Math.random()*(prizeNum-1));
+        //int index = (int) Math.random()*prizeNum;
         return prizeContents.get(index);
+    }
+
+    @Override
+    public List<PrizeContent> getAllPrize() {
+        PrizeContentExample prizeContentExample = new PrizeContentExample();
+        PrizeContentExample.Criteria criteria = prizeContentExample.createCriteria();
+        List<PrizeContent> prizeContents = prizeContentDao.selectByExample(prizeContentExample);
+        return prizeContents;
     }
 }

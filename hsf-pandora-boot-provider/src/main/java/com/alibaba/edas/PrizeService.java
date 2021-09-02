@@ -54,4 +54,6 @@ public interface PrizeService {
      */
     PrizeContent luckDraw();
 
+    List<PrizeContent> getAllPrize();
+
 }
