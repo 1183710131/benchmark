@@ -1,19 +1,19 @@
-//package com.alibaba.edas;
-//
-//import com.alibaba.boot.hsf.annotation.HSFConsumer;
-//
-//import com.taobao.hsf.remoting.service.GenericService;
-//import com.taobao.pandora.boot.test.junit4.DelegateTo;
-//import com.taobao.pandora.boot.test.junit4.PandoraBootRunner;
-//
-//import junit.framework.TestCase;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.AdditionalAnswers;
-//import org.mockito.Mockito;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.stereotype.Component;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+package com.alibaba.edas;
+
+import com.alibaba.boot.hsf.annotation.HSFConsumer;
+
+import com.taobao.hsf.remoting.service.GenericService;
+import com.taobao.pandora.boot.test.junit4.DelegateTo;
+import com.taobao.pandora.boot.test.junit4.PandoraBootRunner;
+
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.AdditionalAnswers;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //
 //@RunWith(PandoraBootRunner.class)
 //@DelegateTo(SpringJUnit4ClassRunner.class)
@@ -25,28 +25,28 @@
 //    /**
 //     * 当使用 @HSFConsumer 时，一定要在 @SpringBootTest 类加载中，加载本类，通过本类来注入对象，否则当做泛化时，会出现类转换异常。
 //     */
-//    @HSFConsumer(generic = true)
-//    HelloService helloService;
+////    @HSFConsumer(generic = true)
+////    HelloService helloService222;
 //
-//    //普通的调用
-//    @Test
-//    public void testInvoke() {
-//        TestCase.assertEquals("hello world", helloService.echo("hello world"));
-//    }
+////    //普通的调用
+////    @Test
+////    public void testInvoke() {
+////        TestCase.assertEquals("hello world", helloService222.echo("hello world"));
+////    }
 //
-//    //泛化调用
-//    @Test
-//    public void testGenericInvoke() {
-//        GenericService service = (GenericService) helloService;
-//        Object result = service.$invoke("echo", new String[]{"java.lang.String"}, new Object[]{"hello world"});
-//        TestCase.assertEquals("hello world", result);
-//    }
+////    //泛化调用
+////    @Test
+////    public void testGenericInvoke() {
+////        GenericService service = (GenericService) helloService222;
+////        Object result = service.$invoke("echo", new String[]{"java.lang.String"}, new Object[]{"hello world"});
+////        TestCase.assertEquals("hello world", result);
+////    }
 //
-//    //返回值 Mock
-//    @Test
-//    public void testMock() {
-//        HelloService mock = Mockito.mock(HelloService.class, AdditionalAnswers.delegatesTo(helloService));
-//        Mockito.when(mock.echo("")).thenReturn("beta");
-//        TestCase.assertEquals("beta", mock.echo(""));
-//    }
+////    //返回值 Mock
+////    @Test
+////    public void testMock() {
+////        HelloService mock = Mockito.mock(HelloService.class, AdditionalAnswers.delegatesTo(helloService));
+////        Mockito.when(mock.echo("")).thenReturn("beta");
+////        TestCase.assertEquals("beta", mock.echo(""));
+////    }
 //}
